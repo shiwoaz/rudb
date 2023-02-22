@@ -1,3 +1,4 @@
+#[derive(PartialEq, Debug)]
 pub enum StatementType {
     StatementSelect,
     StatementInsert,
@@ -31,5 +32,27 @@ pub fn deal_with_statement(s: &str) -> Option<StatementType> {
         }
     } else {
         None
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_construct() {
+        let mut p = Statement::new();
+        p.construct_statement(StatementType::StatementSelect);
+        assert_eq!(p.statement_type, StatementType::StatementSelect);
+    }
+
+    #[test]
+    fn test_deal_with_statement() {
+        let s = "select * from table";
+        assert_eq!(deal_with_statement(s), Some(StatementType::StatementSelect));
+        let s = "inserT * from table";
+        assert_eq!(deal_with_statement(s), Some(StatementType::StatementInsert));
+        let s = "other * from table";
+        assert_eq!(deal_with_statement(s), None);
     }
 }
