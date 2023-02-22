@@ -1,5 +1,3 @@
-use std::process::Command;
-
 pub enum StatementType {
     StatementSelect,
     StatementInsert,
@@ -7,7 +5,7 @@ pub enum StatementType {
 }
 
 pub struct Statement {
-    statement_type: StatementType,
+    pub statement_type: StatementType,
 }
 
 impl Statement {

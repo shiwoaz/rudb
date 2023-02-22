@@ -36,4 +36,14 @@ pub fn commands(buffer: &InputBuffer) {
         }
         _ => println!("{} unrecognized command!", s),
     }
+
+    execute(stm);
+}
+
+fn execute(statement: Statement) {
+    match statement.statement_type {
+        StatementType::Init => panic!("You need enter some command!"),
+        StatementType::StatementInsert => println!("execute insert"),
+        StatementType::StatementSelect => println!("execute select"),
+    }
 }
