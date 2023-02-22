@@ -4,6 +4,10 @@ use common::{commands, print_prompt};
 mod input_buffer;
 use input_buffer::InputBuffer;
 
+mod statement;
+
+mod meta_command;
+
 fn main() {
     let mut input_buffer = InputBuffer::new();
     loop {

@@ -1,9 +1,10 @@
-use std::{
-    io::{self, Write},
-    process::exit,
-};
+use std::io::{self, Write};
 
-use crate::input_buffer::InputBuffer;
+use crate::{
+    input_buffer::InputBuffer,
+    meta_command::{deal_with_meta_command, MetaResult},
+    statement::{deal_with_statement, Statement, StatementType},
+};
 
 pub fn print_prompt() {
     print!("db > ");
@@ -14,8 +15,25 @@ pub const READ_LINE_ERR: &'static str = "fail to read line";
 
 pub fn commands(buffer: &InputBuffer) {
     let s = &buffer.buffer.trim()[..]; // remove new line char
-    match s {
-        _ if s == ".exit" => exit(0),
-        un => println!("{} unrecognized command!", un),
-    };
+    if s.chars().nth(0).unwrap_or('@') == '.' {
+        match deal_with_meta_command(s) {
+            Some(MetaResult::MetaCommandSuccess) => (),
+            Some(MetaResult::MetaCommandUnrecognizedCommand) => {
+                println!("{} unrecognized command!", s)
+            }
+            _ => (),
+        };
+    }
+    let mut stm = Statement::new();
+    match deal_with_statement(s) {
+        Some(StatementType::StatementSelect) => {
+            println!("select got {}", s);
+            stm.construct_statement(StatementType::StatementSelect);
+        }
+        Some(StatementType::StatementInsert) => {
+            println!("insert got {}", s);
+            stm.construct_statement(StatementType::StatementInsert);
+        }
+        _ => println!("{} unrecognized command!", s),
+    }
 }
