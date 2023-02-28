@@ -3,7 +3,7 @@ use std::io::{self, Write};
 use crate::{
     input_buffer::InputBuffer,
     meta_command::{deal_with_meta_command, MetaResult},
-    statement::{deal_with_statement, Statement, StatementType},
+    statement::{deal_with_statement, prepare_statement, Statement, StatementType},
 };
 
 pub fn print_prompt() {
@@ -33,6 +33,10 @@ pub fn commands(buffer: &InputBuffer) {
         Some(StatementType::StatementInsert) => {
             println!("insert got {}", s);
             stm.construct_statement(StatementType::StatementInsert);
+            if let Some(row) = prepare_statement(s) {
+                println!("{:?}", row);
+                stm.row = row;
+            } // parse error will painc for now
         }
         _ => println!("{} unrecognized command!", s),
     }
@@ -42,7 +46,7 @@ pub fn commands(buffer: &InputBuffer) {
 
 fn execute(statement: Statement) {
     match statement.statement_type {
-        StatementType::Init => panic!("You need enter some command!"),
+        StatementType::Init => (),
         StatementType::StatementInsert => println!("execute insert"),
         StatementType::StatementSelect => println!("execute select"),
     }

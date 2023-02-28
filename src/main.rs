@@ -4,9 +4,9 @@ use common::{commands, print_prompt};
 mod input_buffer;
 use input_buffer::InputBuffer;
 
-mod statement;
-
+mod macros;
 mod meta_command;
+mod statement;
 
 fn main() {
     let mut input_buffer = InputBuffer::new();
